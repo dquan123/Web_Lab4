@@ -12,7 +12,7 @@ La llamada a `http.createServer(async (req, res) => { ... }` cierra la función 
  
 // Después
 })  // ← cierra la función arrow Y la llamada a createServer
-
+```
 
 ### Error #2: Paréntesis de cierre faltante en `server.listen(PORT, () => {`
  
