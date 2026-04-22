@@ -12,21 +12,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.url === "/info") {
-    res.writeHead(200, { "Content-Type": "application-json" })
-    res.end("Ruta de información")
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.end(JSON.stringify({ mensaje: "Ruta de información" }))
     return
   }
 
   if (req.url === "/api/student") {
     const filePath = path.join(process.cwd(), "datos.json")
-    const texto = fs.readFile(filePath, "utf-8")
+    const texto = await fs.readFile(filePath, "utf-8")
     res.writeHead(200, { "Content-Type": "application/json" })
-    res.end(JSON.stringify(texto))
+    res.end(texto)
     return
   }
 
-  res.writeHead(200, { "Content-Type": "text/plain" })
-  res.end("Ruta no encontrada")
+  res.writeHead(404, { "Content-Type": "application/json" })
+  res.end(JSON.stringify({ error: "Ruta no encontrada" }))
 })
 
 server.listen(PORT, () => {
