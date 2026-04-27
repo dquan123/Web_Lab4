@@ -16,13 +16,21 @@ API REST construida con Node.js y Express para gestionar una colección de canci
 ## Estructura del proyecto
 
 Lab4/
+
 ├── parte1/
+
 │   ├── servidor-malo.js      ← servidor original con errores
+
 │   ├── servidor-corregido.js ← servidor corregido
+
 │   ├── datos.json
+
 │   └── SOLUCION.md           ← documentación de errores encontrados
+
 ├── index.js                  ← API REST con Express
+
 ├── package.json
+
 └── README.md
 
 ---
