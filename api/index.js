@@ -80,7 +80,7 @@ app.get("/info", (req, res) => {
 
 // GET /saludo - Texto plano personalizado
 app.get("/saludo", (req, res) => {
-  res.status(200).send("¡Hola! Bienvenido a la API de Canciones 🎵")
+  res.status(200).send("¡Hola! Bienvenido a la API de Canciones")
 })
 
 // GET /api/status - Estado del servidor
@@ -105,4 +105,135 @@ app.get("/api/canciones", (req, res) => {
   }
 
   res.status(200).json({ ok: true, data: canciones })
+})
+
+// GET /api/canciones/:id - Obtener una canción por ID
+app.get("/api/canciones/:id", (req, res) => {
+  const { id } = req.params
+  const cancion = canciones.find(c => c.id === id)
+
+  if (!cancion) {
+    return res.status(404).json({
+      ok: false,
+      error: "Canción no encontrada"
+    })
+  }
+
+  res.status(200).json({ ok: true, data: cancion })
+})
+
+// POST /api/canciones - Crear una nueva canción
+app.post("/api/canciones", (req, res) => {
+  const { titulo, artista, genero, duracion, favorita } = req.body
+
+  // Validación de campos obligatorios
+  if (!titulo || !artista || !genero || !duracion) {
+    return res.status(400).json({
+      ok: false,
+      error: "Faltan campos obligatorios",
+      requeridos: ["titulo", "artista", "genero", "duracion"]
+    })
+  }
+
+  const nuevaCancion = {
+    id: crypto.randomUUID(),
+    titulo,
+    artista,
+    genero,
+    duracion,
+    favorita: favorita ?? false
+  }
+
+  canciones.push(nuevaCancion)
+
+  res.status(201).json({ ok: true, data: nuevaCancion })
+})
+
+// PUT /api/canciones/:id - Reemplazar una canción completa
+app.put("/api/canciones/:id", (req, res) => {
+  const { id } = req.params
+  const { titulo, artista, genero, duracion, favorita } = req.body
+
+  const index = canciones.findIndex(c => c.id === id)
+
+  if (index === -1) {
+    return res.status(404).json({
+      ok: false,
+      error: "Canción no encontrada"
+    })
+  }
+
+  // Validación - PUT reemplaza todo, todos los campos son obligatorios
+  if (!titulo || !artista || !genero || !duracion) {
+    return res.status(400).json({
+      ok: false,
+      error: "Faltan campos obligatorios",
+      requeridos: ["titulo", "artista", "genero", "duracion"]
+    })
+  }
+
+  const cancionActualizada = {
+    id,
+    titulo,
+    artista,
+    genero,
+    duracion,
+    favorita: favorita ?? false
+  }
+
+  canciones[index] = cancionActualizada
+
+  res.status(200).json({ ok: true, data: cancionActualizada })
+})
+
+// PATCH /api/canciones/:id - Actualizar parcialmente una canción
+app.patch("/api/canciones/:id", (req, res) => {
+  const { id } = req.params
+  const campos = req.body
+
+  const index = canciones.findIndex(c => c.id === id)
+
+  if (index === -1) {
+    return res.status(404).json({
+      ok: false,
+      error: "Canción no encontrada"
+    })
+  }
+
+  // Validación - al menos un campo debe venir en el body
+  if (Object.keys(campos).length === 0) {
+    return res.status(400).json({
+      ok: false,
+      error: "Debes enviar al menos un campo para actualizar"
+    })
+  }
+
+  const cancionActualizada = {
+    ...canciones[index],
+    ...campos,
+    id // el id nunca se puede cambiar
+  }
+
+  canciones[index] = cancionActualizada
+
+  res.status(200).json({ ok: true, data: cancionActualizada })
+})
+
+// DELETE /api/canciones/:id - Eliminar una canción
+app.delete("/api/canciones/:id", (req, res) => {
+  const { id } = req.params
+
+  const index = canciones.findIndex(c => c.id === id)
+
+  if (index === -1) {
+    return res.status(404).json({
+      ok: false,
+      error: "Canción no encontrada"
+    })
+  }
+
+  const cancionEliminada = canciones[index]
+  canciones.splice(index, 1)
+
+  res.status(200).json({ ok: true, data: cancionEliminada })
 })
