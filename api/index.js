@@ -237,3 +237,21 @@ app.delete("/api/canciones/:id", (req, res) => {
 
   res.status(200).json({ ok: true, data: cancionEliminada })
 })
+
+
+
+// Ruta 404 - cualquier ruta no definida
+app.use((req, res) => {
+  res.status(404).json({
+    ok: false,
+    error: "Ruta no encontrada",
+    ruta: req.url,
+    metodo: req.method,
+    sugerencia: "Visita / para ver los endpoints disponibles"
+  })
+})
+
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`)
+})
