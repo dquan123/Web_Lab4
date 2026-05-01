@@ -37,6 +37,22 @@ Lab4/
 
 ## Cómo correr el proyecto
 
+## Requisitos previos
+
+- Node.js v18 o superior
+- npm
+
+## Instalación
+
+```bash
+# Clonar el repositorio
+git clone [url-del-repo]
+cd [nombre-de-la-carpeta]
+
+# Instalar dependencias
+npm install
+```
+
 ### Parte 1 — Servidor corregido
 ```bash
 cd parte1
